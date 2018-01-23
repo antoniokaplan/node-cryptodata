@@ -35,7 +35,9 @@ const logObject = {
 const createVolumeLog = (symbolArray) => {
   const log = {};
   for (const symbol of symbolArray) {
-      log[symbol] = { ...logObject }
+      log[symbol] = { ...logObject };
+      log[symbol].currentInterval = { ...logObject };
+      log[symbol].currentInterval.tickerSymbol = symbol;
   };
   console.log(log);
   return log;
@@ -84,20 +86,22 @@ export const tradeSocket = (symbolArray) => {
 
     const tickerSymbol = trade.symbol;
     // add a new record for each minute as the key
-    if(!volumeLog[tickerSymbol][timestamp]) volumeLog[tickerSymbol][timestamp] = { ...logObject };
+    if(!volumeLog[tickerSymbol][timestamp]){
+      volumeLog[tickerSymbol][timestamp] = { ...logObject };
+      try {
+        const filedir = `./${tickerSymbol}`;
+        const filepath = `${tickerSymbol}-${fileTimeStamp}.tsv`;
+        const data = addToFile(filedir, filepath, volumeLog[tickerSymbol].currentInterval, fileError);
+
+      } catch(e) {
+        console.log("FILE ERROR",e);
+      }
+    }
 
     volumeLog[tickerSymbol][timestamp] = updateLog(trade,volumeLog[tickerSymbol][timestamp]);
     volumeLog[tickerSymbol].currentInterval = updateLog(trade,volumeLog[tickerSymbol][timestamp]);
     console.log(volumeLog[tickerSymbol].currentInterval);
 
-    try {
-      const filedir = `./${tickerSymbol}`;
-      const filepath = `${tickerSymbol}-${fileTimeStamp}.txt`;
-      const data = addToFile(filedir, filepath, volumeLog[tickerSymbol][timestamp], fileError);
-
-    } catch(e) {
-      console.log("FILE ERROR",e);
-    }
 
 
   });

@@ -15,5 +15,9 @@ const client = Binance({
   apiSecret: process.env.BINANCE_KEY.SECRET_KEY,
 });
 
-const binanceRest = BinanceRest(client);
-const ticker = binanceRest.getAllTickets();
+(async function getAllSymbols(){
+  const binanceRest = BinanceRest(client);
+  const ticker = await binanceRest.getAllTickers();
+  console.log("binanceRest.symbolArray",binanceRest.symbolArray);
+  tradeSocket(binanceRest.symbolArray);
+})();

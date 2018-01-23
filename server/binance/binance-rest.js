@@ -11,19 +11,20 @@ const BinanceRest = (client) => {
     console.log(e);
   };
 
+  const symbolArray = [];
+
   const parseSymbols = (tickerData) => {
-    let symbolArray = [];
     for (const symbol in tickerData) {
-      if(symbol !== '123456') symbolArray.push(symbol)
+      if(symbol !== '123456' && symbol.slice(-3)==("BTC")) symbolArray.push(symbol);
     }
     return symbolArray;
   }
 
-  async function getAllTickets() {
+  async function getAllTickers() {
     const tickerData = await client.allBookTickers(errorLogger);
-    console.log("bookTickers", tickerData);
+    // console.log("bookTickers", tickerData);
     const tickerSymbols = parseSymbols(tickerData);
-    console.log(tickerSymbols);
+    // console.log(tickerSymbols);
     return {tickerData, tickerSymbols};
   }
 
@@ -91,11 +92,11 @@ const BinanceRest = (client) => {
     side: 'SELL',
   };
 
-  return { getAllTickets };
+  return { getAllTickers, symbolArray };
 };
 
 // export default {
 //   setClient,
-//   getAllTickets,
+//   getAllTickers,
 // }
 export default BinanceRest;
