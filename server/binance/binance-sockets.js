@@ -10,10 +10,7 @@ const FILE_INTERVAL = "HH";
 const TIME_INTERVAL = "HH:mm";
 
 
-const client = Binance({
-  apiKey: 'yoOTv1LOaPGRcxY9qUmInfBpePo4hDia0c21cSvKOuOwFjckCHewwfuRWPFtDamy',
-  apiSecret: 'MTbJHp8tVP6zqyhRYCisb7mrcZt5IZv8SZ8gMx2vtT92RxEGhUbeRto9zPpESxnR',
-});
+
 
 
 // let endpoints = binance.websockets.subscriptions();
