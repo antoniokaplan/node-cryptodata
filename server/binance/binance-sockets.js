@@ -33,7 +33,7 @@ const BinanceSockets = (client) => {
         log[symbol].currentInterval = { ...logObject };
         log[symbol].currentInterval.tickerSymbol = symbol;
     };
-    console.log(log);
+    // console.log(log);
     return log;
   };
 
@@ -47,12 +47,12 @@ const BinanceSockets = (client) => {
       obj.lastPrice = trade.price;
       obj.delta = obj.buy - obj.sell;
 
-      logger.logGreen(JSON.stringify(obj));
+      // logger.logGreen(JSON.stringify(obj));
     } else { //sell
       obj.sell += trade.quantity*1;
       obj.lastPrice = trade.price;
       obj.delta = obj.buy - obj.sell;
-      logger.logRed(JSON.stringify(obj));
+      // logger.logRed(JSON.stringify(obj));
     }
     return obj;
   }
@@ -94,7 +94,7 @@ const BinanceSockets = (client) => {
 
       volumeLog[tickerSymbol][timestamp] = updateLog(trade,volumeLog[tickerSymbol][timestamp]);
       volumeLog[tickerSymbol].currentInterval = updateLog(trade,volumeLog[tickerSymbol][timestamp]);
-      console.log(volumeLog[tickerSymbol].currentInterval);
+      // console.log(volumeLog[tickerSymbol].currentInterval);
 
 
 

@@ -42,7 +42,7 @@ async function addToFile(dir, filePath, obj) {
     if(exists) fileData = await fs.appendFile(fullPath, fileData, fileError);
   } catch(e) {
     fileData = e;
-    console.log("addToFile",e);
+    // console.log("addToFile",e);
   }
   return fileData;
 }
