@@ -26,6 +26,7 @@ async function initFile(dir, fullPath, obj){
   } catch (e) {
     const headerRow = createHeaderRow(obj);
     await fs.appendFile(fullPath, headerRow, fileError);
+    return false;
   }
   return true;
 }
@@ -37,7 +38,7 @@ async function addToFile(dir, filePath, obj) {
   try {
     const exists = await initFile(dir, fullPath, obj);
     // fileData = await fs.appendFile(filePath, JSON.stringify(obj), fileError);
-    fileData = await fs.appendFile(fullPath, fileData, fileError);
+    if(exists) fileData = await fs.appendFile(fullPath, fileData, fileError);
   } catch(e) {
     fileData = e;
     console.log("addToFile",e);

@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 
 // import { addToFile,  readFile  } from './file-helpers'
 const config = require('./config')(process.env);
-import { tradeSocket } from './binance/binance-sockets'
+import BinanceSockets from './binance/binance-sockets'
 import BinanceRest from './binance/binance-rest'
 
 dotenv.config();
@@ -14,10 +14,11 @@ const client = Binance({
   apiKey: process.env.BINANCE_KEY.API_KEY,
   apiSecret: process.env.BINANCE_KEY.SECRET_KEY,
 });
+const binanceRest = BinanceRest(client);
+const binanceSockets = BinanceSockets(client);
 
 (async function getAllSymbols(){
-  const binanceRest = BinanceRest(client);
   const ticker = await binanceRest.getAllTickers();
   console.log("binanceRest.symbolArray",binanceRest.symbolArray);
-  tradeSocket(binanceRest.symbolArray);
+  binanceSockets.tradeSocket(binanceRest.symbolArray);
 })();
