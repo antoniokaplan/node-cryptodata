@@ -1,5 +1,6 @@
 import fs from 'fs';
-import {formatCsv, createHeaderRow} from './csv-format';
+import mkdirp from 'mkdirp';
+import { formatCsv, createHeaderRow } from './csv-format';
 
 // the first line will create a writeStream to the file path
 // const FS = (filePath) => {
@@ -8,11 +9,11 @@ const fileError = (e) => {
   if(e) console.log("FILE ERROR",e);
 };
 
-const initDir = (myDir) => {
+async function initDir(myDir){
   try {
     fs.accessSync(myDir);
   } catch (e) {
-    fs.mkdirSync(myDir);
+    await mkdirp(myDir, fileError);
   }
 }
 
@@ -20,7 +21,7 @@ const initDir = (myDir) => {
   * checks if file exists, if not it creates the header row
 */
 async function initFile(dir, fullPath, obj){
-  initDir(dir);
+  await initDir(dir);
   try {
     await fs.accessSync(fullPath);
   } catch (e) {

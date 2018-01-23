@@ -56,3 +56,4 @@ buck-out/
 #
 .env
 /aws
+/data-files
