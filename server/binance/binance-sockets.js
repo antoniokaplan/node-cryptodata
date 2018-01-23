@@ -1,5 +1,6 @@
 import Binance from 'binance-api-node';
 import moment from 'moment';
+import path from 'path';
 
 const logger = require('../logger');
 import { addToFile,  readFile  } from './file-helpers'
@@ -83,7 +84,8 @@ const BinanceSockets = (client) => {
       if(!volumeLog[tickerSymbol][timestamp]){
         volumeLog[tickerSymbol][timestamp] = { ...logObject };
         try {
-          const filedir = `./data-files/${tickerSymbol}`;
+          const basepath = path.resolve(process.env.PWD);
+          const filedir = `${basepath}/data-files/${tickerSymbol}`;
           const filepath = `${tickerSymbol}-${fileTimeStamp}.tsv`;
           const data = addToFile(filedir, filepath, volumeLog[tickerSymbol].currentInterval, fileError);
 
