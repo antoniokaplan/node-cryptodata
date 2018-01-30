@@ -35,6 +35,28 @@ const BinanceSockets = (client) => {
     quoteVolume: 0,
     buyVolume: 0,
     quoteBuyVolume: 0,
+    b0_p:0,
+    b0_q:0,
+    b1_p:0,
+    b1_q:0,
+    b2_p:0,
+    b2_q:0,
+    b3_p:0,
+    b3_q:0,
+    b4_p:0,
+    b4_q:0,
+
+    a0_p:0,
+    a0_q:0,
+    a1_p:0,
+    a1_q:0,
+    a2_p:0,
+    a_q:0,
+    a3_p:0,
+    a3_q:0,
+    a4_p:0,
+    a4_q:0,
+
   };
 
   const createVolumeLog = (symbolArray) => {
