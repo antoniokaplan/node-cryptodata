@@ -55,12 +55,12 @@ const BinanceSockets = (client) => {
 
     if(!trade.maker){ //marketBuy
       obj.marketBuy += trade.quantity*1;
-      obj.lastPrice = trade.price;
+      // obj.lastPrice = trade.price;
       obj.marketDelta = obj.marketBuy - obj.marketSell;
       // logger.logGreen(JSON.stringify(obj));
     } else { //marketSell
       obj.marketSell += trade.quantity*1;
-      obj.lastPrice = trade.price;
+      // obj.lastPrice = trade.price;
       obj.marketDelta = obj.marketBuy - obj.marketSell;
       // logger.logRed(JSON.stringify(obj));
     }
@@ -89,9 +89,9 @@ const BinanceSockets = (client) => {
     obj.close = Number(trade.close);
     obj.volume = Number(trade.volume);
     obj.totalTrades = Number(trade.trades);
-    obj.quoteVolume = Number(trade.quoteVolume);
+    // obj.quoteVolume = Number(trade.quoteVolume);
     obj.buyVolume = Number(trade.buyVolume);
-    obj.quoteBuyVolume = Number(trade.quoteBuyVolume);
+    // obj.quoteBuyVolume = Number(trade.quoteBuyVolume);
     return obj;
   };
 
