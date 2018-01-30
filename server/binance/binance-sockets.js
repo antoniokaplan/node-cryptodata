@@ -21,10 +21,20 @@ const BinanceSockets = (client) => {
     tickerSymbol: "",
     interval: "",
     timestamp: null,
-    buy: 0,
-    sell: 0,
-    delta: 0,
-    lastPrice:0,
+    marketBuy: 0,
+    marketSell: 0,
+    marketVolume: 0,
+    marketTrades: 0,
+    marketDelta: 0,
+    lastPrice: 0,
+    open: 0,
+    high: 0,
+    close: 0,
+    volume: 0,
+    totalTrades: 0,
+    quoteVolume: 0,
+    buyVolume: 0,
+    quoteBuyVolume: 0,
   };
 
   const createVolumeLog = (symbolArray) => {
@@ -38,23 +48,24 @@ const BinanceSockets = (client) => {
     return log;
   };
 
-  const updateLog = (trade,obj) => {
+  const formatLog = (trade,obj) => {
     obj.tickerSymbol = trade.symbol;
     obj.timestamp = trade.eventTime;
     obj.interval = trade.interval;
 
-    if(!trade.maker){ //buy
-      obj.buy += trade.quantity*1;
+    if(!trade.maker){ //marketBuy
+      obj.marketBuy += trade.quantity*1;
       obj.lastPrice = trade.price;
-      obj.delta = obj.buy - obj.sell;
-
+      obj.marketDelta = obj.marketBuy - obj.marketSell;
       // logger.logGreen(JSON.stringify(obj));
-    } else { //sell
-      obj.sell += trade.quantity*1;
+    } else { //marketSell
+      obj.marketSell += trade.quantity*1;
       obj.lastPrice = trade.price;
-      obj.delta = obj.buy - obj.sell;
+      obj.marketDelta = obj.marketBuy - obj.marketSell;
       // logger.logRed(JSON.stringify(obj));
     }
+    obj.marketVolume += trade.quantity*1;
+    obj.marketTrades += 1;
     return obj;
   }
 
@@ -62,12 +73,17 @@ const BinanceSockets = (client) => {
     console.log("FILE ERROR",e);
   };
 
+  // create an instance of the volume log for the symbol
+  let volumeLog = null;
 
   // pass ARRAY of symbols
   const tradeSocket = (symbolArray) => {
 
     // create an instance of the volume log for the symbol
-    const volumeLog = createVolumeLog(symbolArray);
+    if (volumeLog === null ) {
+      console.log("VOLUMELOG not started")
+      volumeLog = createVolumeLog(symbolArray);
+    }
 
     const socket = client.ws.trades(symbolArray, trade => {
 
@@ -94,30 +110,63 @@ const BinanceSockets = (client) => {
         }
       }
 
-      volumeLog[tickerSymbol][timestamp] = updateLog(trade,volumeLog[tickerSymbol][timestamp]);
-      volumeLog[tickerSymbol].currentInterval = updateLog(trade,volumeLog[tickerSymbol][timestamp]);
-      // console.log(volumeLog[tickerSymbol].currentInterval);
+      volumeLog[tickerSymbol][timestamp] = formatLog(trade,volumeLog[tickerSymbol][timestamp]);
+      volumeLog[tickerSymbol].currentInterval = formatLog(trade,volumeLog[tickerSymbol][timestamp]);
+    });
+    return socket;
+  };
 
+  const formatCandle = (trade,obj) => {
+    obj.open = Number(trade.open);
+    obj.high = Number(trade.high);
+    obj.close = Number(trade.close);
+    obj.volume = Number(trade.volume);
+    obj.totalTrades = Number(trade.trades);
+    obj.quoteVolume = Number(trade.quoteVolume);
+    obj.buyVolume = Number(trade.buyVolume);
+    obj.quoteBuyVolume = Number(trade.quoteBuyVolume);
+    return obj;
+  };
 
+  const getDepth = (symbolArray) => {
+    const depthObject = symbolArray.map(sym => ({symbol:sym, level:5}))
+    const socket = client.ws.partialDepth(depthObject, (result) => {
+    	console.log(result)
+    });
+  };
 
+  const updateLog = (data, formatFun) => {
+    const now = moment(data.eventTime);
+    const tickerSymbol = data.symbol;
+    const timestamp = now.format(`YYYY-MM-DD_${TIME_INTERVAL}`);
+    console.log("volumeLog[tickerSymbol][timestamp]",volumeLog[tickerSymbol][timestamp])
+    if(volumeLog[tickerSymbol][timestamp]) {
+      volumeLog[tickerSymbol][timestamp] = formatFun(data, volumeLog[tickerSymbol][timestamp]);
+      volumeLog[tickerSymbol].currentInterval = formatFun(data, volumeLog[tickerSymbol][timestamp]);
+      console.log(volumeLog[tickerSymbol].currentInterval)
+    }
+  }
+
+  const getCandles = (symbolArray) => {
+    if (volumeLog === null ) volumeLog = createVolumeLog(symbolArray);
+    const socket = client.ws.candles(symbolArray, '1m', candleData => {
+      updateLog(candleData, formatCandle);
+      // console.log(candleData)
+      // const now = moment(candleData.eventTime);
+      // const tickerSymbol = candleData.symbol;
+      // const timestamp = now.format(`YYYY-MM-DD_${TIME_INTERVAL}`);
+      // console.log("volumeLog[tickerSymbol][timestamp]",volumeLog[tickerSymbol][timestamp])
+      // if(volumeLog[tickerSymbol][timestamp]) {
+      //   volumeLog[tickerSymbol][timestamp] = formatCandle(candleData, volumeLog[tickerSymbol][timestamp]);
+      //   volumeLog[tickerSymbol].currentInterval = formatCandle(candleData, volumeLog[tickerSymbol][timestamp]);
+      //   console.log(volumeLog[tickerSymbol].currentInterval)
+      // }
     });
     return socket;
   };
 
 
-  const getDepth = (symbolArray) => {
-    const socket = client.ws.depthCache(symbolArray, function(symbols, depth) {
-    	let max = 10; // Show 10 closest orders only
-    	let bids = client.sortBids(depth.bids, max);
-    	let asks = client.sortAsks(depth.asks, max);
-    	console.log(symbols+" depth cache update");
-    	console.log("asks", asks);
-    	console.log("bids", bids);
-    	console.log("ask: "+client.first(asks));
-    	console.log("bid: "+client.first(bids));
-    });
-  };
 
-  return { tradeSocket, getDepth };
+  return { tradeSocket, getDepth, getCandles };
 }
 export default BinanceSockets;
