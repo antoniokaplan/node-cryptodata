@@ -20,6 +20,8 @@ const binanceSockets = BinanceSockets(client);
 (async function getAllSymbols(){
   const ticker = await binanceRest.getAllTickers();
   console.log("binanceRest.symbolArray",binanceRest.symbolArray);
+  
   binanceSockets.tradeSocket(binanceRest.symbolArray);
   binanceSockets.getCandles(binanceRest.symbolArray);
+  binanceSockets.getDepth(binanceRest.symbolArray);
 })();
