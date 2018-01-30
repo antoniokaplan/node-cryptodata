@@ -25,7 +25,6 @@ const BinanceSockets = (client) => {
   const logObject = {
     tickerSymbol: "",
     interval: "",
-    timestamp: null,
     marketBuy: 0,
     marketSell: 0,
     marketVolume: 0,
@@ -37,9 +36,7 @@ const BinanceSockets = (client) => {
     close: 0,
     volume: 0,
     totalTrades: 0,
-    quoteVolume: 0,
     buyVolume: 0,
-    quoteBuyVolume: 0,
     b0_p:0,
     b0_q:0,
     b1_p:0,
@@ -56,7 +53,7 @@ const BinanceSockets = (client) => {
     a1_p:0,
     a1_q:0,
     a2_p:0,
-    a_q:0,
+    a3_q:0,
     a3_p:0,
     a3_q:0,
     a4_p:0,
@@ -77,7 +74,7 @@ const BinanceSockets = (client) => {
 
   const formatTrades = (trade,obj) => {
     obj.tickerSymbol = trade.symbol;
-    obj.timestamp = trade.eventTime;
+    // obj.timestamp = trade.eventTime;
     obj.interval = trade.interval;
 
     if(!trade.maker){ //marketBuy
