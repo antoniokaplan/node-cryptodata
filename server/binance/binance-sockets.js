@@ -1,14 +1,19 @@
 import Binance from 'binance-api-node';
 import moment from 'moment';
 import path from 'path';
+import dotenv from 'dotenv'
 
 const logger = require('../logger');
 import { addToFile,  readFile  } from './file-helpers'
 
 //separate the files into hourly
-const FILE_INTERVAL = "HH";
+// const FILE_INTERVAL = "HH";
+const FILE_INTERVAL = process.env.FILE_INTERVAL;
+console.log("FILE_INTERVAL",FILE_INTERVAL);
+
 //aggregate the intervals by minute
-const TIME_INTERVAL = "HH:mm";
+// const TIME_INTERVAL = "HH:mm";
+const TIME_INTERVAL = process.env.TIME_INTERVAL;
 
 const BinanceSockets = (client) => {
   // let endpoints = binance.websockets.subscriptions();
