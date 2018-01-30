@@ -48,7 +48,7 @@ const BinanceSockets = (client) => {
     return log;
   };
 
-  const formatLog = (trade,obj) => {
+  const formatTrades = (trade,obj) => {
     obj.tickerSymbol = trade.symbol;
     obj.timestamp = trade.eventTime;
     obj.interval = trade.interval;
