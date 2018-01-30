@@ -21,4 +21,5 @@ const binanceSockets = BinanceSockets(client);
   const ticker = await binanceRest.getAllTickers();
   console.log("binanceRest.symbolArray",binanceRest.symbolArray);
   binanceSockets.tradeSocket(binanceRest.symbolArray);
+  binanceSockets.getCandles(binanceRest.symbolArray);
 })();
