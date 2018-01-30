@@ -104,11 +104,11 @@ const BinanceSockets = (client) => {
     const now = moment(data.eventTime);
     const tickerSymbol = data.symbol;
     const timestamp = now.format(`YYYY-MM-DD_${TIME_INTERVAL}`);
-    console.log("volumeLog[tickerSymbol][timestamp]",volumeLog[tickerSymbol][timestamp])
+    // console.log("volumeLog[tickerSymbol][timestamp]",volumeLog[tickerSymbol][timestamp])
     if(volumeLog[tickerSymbol][timestamp]) {
       volumeLog[tickerSymbol][timestamp] = formatFun(data, volumeLog[tickerSymbol][timestamp]);
       volumeLog[tickerSymbol].currentInterval = formatFun(data, volumeLog[tickerSymbol][timestamp]);
-      console.log(volumeLog[tickerSymbol].currentInterval)
+      // console.log(volumeLog[tickerSymbol].currentInterval)
     }
   };
 
@@ -167,7 +167,7 @@ const BinanceSockets = (client) => {
 
       volumeLog[tickerSymbol][timestamp] = formatTrades(trade,volumeLog[tickerSymbol][timestamp]);
       volumeLog[tickerSymbol].currentInterval = formatTrades(trade,volumeLog[tickerSymbol][timestamp]);
-      console.log(volumeLog[tickerSymbol].currentInterval);
+      // console.log(volumeLog[tickerSymbol].currentInterval);
     });
     return socket;
   };
