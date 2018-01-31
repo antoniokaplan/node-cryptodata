@@ -15,6 +15,8 @@ console.log("FILE_INTERVAL",FILE_INTERVAL);
 // const TIME_INTERVAL = "HH:mm";
 const TIME_INTERVAL = process.env.TIME_INTERVAL;
 
+const BASE_PATH = process.env.DATA_DIRECTORY || path.resolve(process.env.PWD);
+
 const BinanceSockets = (client) => {
   // let endpoints = binance.websockets.subscriptions();
   // for ( let endpoint in endpoints ) {
@@ -138,8 +140,7 @@ const BinanceSockets = (client) => {
     if(!volumeLog[tickerSymbol][timestamp]){
       volumeLog[tickerSymbol][timestamp] = { ...logObject };
       try {
-        const basepath = path.resolve(process.env.PWD);
-        const filedir = `${basepath}/data-files/${tickerSymbol}`;
+        const filedir = `${BASE_PATH}/data-files/${tickerSymbol}`;
         const filepath = `${tickerSymbol}-${fileTimeStamp}.tsv`;
         const data = addToFile(filedir, filepath, volumeLog[tickerSymbol].currentInterval, fileError);
 
@@ -176,8 +177,8 @@ const BinanceSockets = (client) => {
       if(!volumeLog[tickerSymbol][timestamp]){
         volumeLog[tickerSymbol][timestamp] = { ...logObject };
         try {
-          const basepath = path.resolve(process.env.PWD);
-          const filedir = `${basepath}/data-files/${tickerSymbol}`;
+
+          const filedir = `${BASE_PATH}/data-files/${tickerSymbol}`;
           const filepath = `${tickerSymbol}-${fileTimeStamp}.tsv`;
           const data = addToFile(filedir, filepath, volumeLog[tickerSymbol].currentInterval, fileError);
 
