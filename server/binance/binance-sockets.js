@@ -30,7 +30,6 @@ const BinanceSockets = (client) => {
     marketVolume: 0,
     marketTrades: 0,
     marketDelta: 0,
-    lastPrice: 0,
     open: 0,
     high: 0,
     close: 0,
@@ -47,7 +46,6 @@ const BinanceSockets = (client) => {
     b3_q:0,
     b4_p:0,
     b4_q:0,
-
     a0_p:0,
     a0_q:0,
     a1_p:0,
