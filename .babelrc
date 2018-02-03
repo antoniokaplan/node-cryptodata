@@ -1,8 +1,15 @@
 {
-  "presets": ["react-native"],
+  "presets": [
+
+      "es2015",
+      "react",
+      "stage-0",
+      "react-native",
+    ],
   "env": {
     "production": {
       "plugins": ["ignite-ignore-reactotron"]
     }
-  }
+  },
+  "plugins": ["transform-runtime"],
 }
