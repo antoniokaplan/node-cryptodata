@@ -33,6 +33,7 @@ const BinanceSockets = (client) => {
     marketTrades: 0,
     marketDelta: 0,
     open: 0,
+    low: 0,
     high: 0,
     close: 0,
     volume: 0,
@@ -109,6 +110,7 @@ const BinanceSockets = (client) => {
 
   const formatCandle = (trade,obj) => {
     obj.open = Number(trade.open);
+    obj.low = Number(trade.low);
     obj.high = Number(trade.high);
     obj.close = Number(trade.close);
     obj.volume = Number(trade.volume);
