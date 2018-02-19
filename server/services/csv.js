@@ -1,3 +1,4 @@
+import fs from 'fs';
 import dataForge  from 'data-forge';
 
 const csvParams = {
@@ -18,4 +19,17 @@ const loadCsv = (filepath, options=csvParams) => {
 
 };
 
-export default loadCsv;
+const fileError = (e) => {
+  if(e) console.log("FILE ERROR",e);
+};
+
+async function writeCsv(filepath, dataFrame, options=csvParams) {
+  // await fs.appendFile(filepath, dataFrame.toCSV(), fileError);
+  dataFrame.asCSV(options).writeFileSync(filepath);
+  return filepath;
+}
+
+export {
+  loadCsv,
+  writeCsv
+};

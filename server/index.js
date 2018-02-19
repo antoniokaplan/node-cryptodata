@@ -17,7 +17,9 @@ const api = require('./api');
 const httpHeaders = require('./headers');
 const logger = require('./logger');
 const reactenv = require('./env');
-const binance = require('./binance_official');
+
+// const binance = require('./binance_official');
+const indicators = require('./indicators');
 // const setup = require('./middlewares/frontendMiddleware');
 
 const app = express();
